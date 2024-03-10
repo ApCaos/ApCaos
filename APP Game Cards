@@ -1,0 +1,111 @@
+int totalJugador = 0;
+int totalDealer = 0;
+int coinsJuego = 0;
+int num = 0;
+int apuestaJugador = 0;
+int jugadorSePaso = 0;
+string message = "";
+string controlOtraCarta = "";
+string switchControl = "";
+//llamado de funciones con System se almacena en un numbre y luego se llama
+System.Random randomCarta = new System.Random();
+
+while (true)
+{
+    Console.WriteLine("Bienvenido al casino \n" +
+        $"Tus creditos de juego son: {coinsJuego} \n" +
+        "¿Cuantos COINS deseas? \n");
+
+    coinsJuego = int.Parse(Console.ReadLine());
+    switchControl = "menu";
+    Console.Clear();
+
+    for (int i = 0; i <= coinsJuego;)
+    {
+
+        totalJugador = 0;
+        totalDealer = 0;
+
+        switch (switchControl)
+        {
+            case "menu":
+                Console.WriteLine($"Tus creditos de juego son: {coinsJuego} \n");
+                Console.WriteLine("¡¡Escriba '21' para iniciar el juego!!");
+                switchControl = Console.ReadLine();
+                Console.Clear();
+                break;
+
+            case "21":
+                Console.WriteLine($"Tus creditos de juego son: {coinsJuego} \n");
+                Console.WriteLine("Por favor ingresa el valor de tu apuesta:");
+                apuestaJugador = int.Parse(Console.ReadLine());
+
+                if (apuestaJugador > coinsJuego)
+                {
+                    Console.Clear();
+                    Console.WriteLine("No tienes suficientes coins para esta apuesta");
+                    switchControl = "21";
+                }
+                else
+                {
+                    switchControl = "juego";
+                    Console.Clear();
+                }
+                break;
+
+            case "juego":
+
+                jugadorSePaso = 0;
+
+                do
+                {
+                    num = randomCarta.Next(1, 10);
+                    totalJugador = totalJugador + num;
+                    Console.WriteLine($"Tus creditos de juego son: {coinsJuego} \n");
+                    Console.WriteLine("Toma tu carta jugador \n"
+                        + $"Te salio la carta {num}, para un total de {totalJugador} \n"
+                        + "¿Deseas otra carta?");
+                    controlOtraCarta = Console.ReadLine();
+                    i = 1;
+                    Console.Clear();
+
+                } while (((totalJugador) < 22) && (controlOtraCarta == "Si"
+                        || controlOtraCarta == "si"
+                        || controlOtraCarta == "SI"
+                        || controlOtraCarta == "SI"
+                        || controlOtraCarta == "sI"));
+
+                totalDealer = randomCarta.Next(15, 22);
+
+                if (totalJugador > totalDealer && totalJugador < 22)
+                {
+                    message = "Venciste aL dealer, felicidades \n";
+                    switchControl = "menu";
+                    coinsJuego = ((coinsJuego - apuestaJugador) + (apuestaJugador * 2));
+                    Console.Clear();
+                }
+                else if (totalJugador <= totalDealer && totalDealer < 22)
+                {
+                    message = "Perdiste vs el dealer, lo siento \n";
+                    coinsJuego = (coinsJuego - apuestaJugador);
+                    switchControl = "menu";
+                    Console.Clear();
+                }
+                else
+                {
+                    message = "Perdiste vs el dealer, te pasaste de 21 \n";
+                    coinsJuego = (coinsJuego - apuestaJugador);
+                    switchControl = "menu";
+                    Console.Clear();
+                }
+                Console.WriteLine($"El Dealer tiene {totalDealer} ! \n"
+                                    + $"{message}");
+                break;
+            default:
+                switchControl = "menu";
+                Console.Clear();
+                break;
+        }
+    }
+    coinsJuego = 0;
+}
