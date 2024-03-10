@@ -3,7 +3,6 @@ int totalDealer = 0;
 int coinsJuego = 0;
 int num = 0;
 int apuestaJugador = 0;
-int jugadorSePaso = 0;
 string message = "";
 string controlOtraCarta = "";
 string switchControl = "";
@@ -54,26 +53,32 @@ while (true)
                 break;
 
             case "juego":
-
-                jugadorSePaso = 0;
-
                 do
                 {
-                    num = randomCarta.Next(1, 10);
-                    totalJugador = totalJugador + num;
-                    Console.WriteLine($"Tus creditos de juego son: {coinsJuego} \n");
-                    Console.WriteLine("Toma tu carta jugador \n"
-                        + $"Te salio la carta {num}, para un total de {totalJugador} \n"
-                        + "¿Deseas otra carta?");
-                    controlOtraCarta = Console.ReadLine();
-                    i = 1;
-                    Console.Clear();
+                    if (totalJugador >= 22)
+                    {
+                        switchControl = "menu";
+                        coinsJuego = (coinsJuego - apuestaJugador);
+                        Console.WriteLine("Te has pasado de 21.");
+                        break;
+                    }
+                    else
+                    {
+                        num = randomCarta.Next(1, 10);
+                        totalJugador = totalJugador + num;
+                        Console.WriteLine($"Tus creditos de juego son: {coinsJuego} \n");
+                        Console.WriteLine("Toma tu carta jugador \n"
+                            + $"Te salio la carta {num}, para un total de {totalJugador} \n"
+                            + "¿Deseas otra carta?");
+                        if (totalJugador <= 21)
+                        {
+                            controlOtraCarta = Console.ReadLine();
+                        }
+                        i = 1;
+                        Console.Clear();
+                    }
 
-                } while (((totalJugador) < 22) && (controlOtraCarta == "Si"
-                        || controlOtraCarta == "si"
-                        || controlOtraCarta == "SI"
-                        || controlOtraCarta == "SI"
-                        || controlOtraCarta == "sI"));
+                } while (controlOtraCarta.ToLower() == "si");
 
                 totalDealer = randomCarta.Next(15, 22);
 
@@ -91,13 +96,7 @@ while (true)
                     switchControl = "menu";
                     Console.Clear();
                 }
-                else
-                {
-                    message = "Perdiste vs el dealer, te pasaste de 21 \n";
-                    coinsJuego = (coinsJuego - apuestaJugador);
-                    switchControl = "menu";
-                    Console.Clear();
-                }
+
                 Console.WriteLine($"El Dealer tiene {totalDealer} ! \n"
                                     + $"{message}");
                 break;
